@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <input type="file" id="photo" multiple>
+  <button onclick="uploadImages()">Upload Image</button>
+
+  <ul id="list">
+    <a href=""></a>
+  </ul>
+
+  <!-- Thêm Firebase vào dự án -->
+  <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.3.0/firebase-storage-compat.js"></script>
+
+  <script>
+    // Cấu hình Firebase
+    var firebaseConfig = {
+      apiKey: "AIzaSyBnSgLNQca9x6g5SFN8CU9YA1tBz5gGn6c",
+      authDomain: "travel-bee-e0b59.firebaseapp.com",
+      projectId: "travel-bee-e0b59",
+      storageBucket: "travel-bee-e0b59.appspot.com",
+      messagingSenderId: "991526403311",
+      appId: "1:991526403311:web:24e7a3ba76e7d0d769af1a",
+      measurementId: "G-DE29CFQQMY"
+    };
+
+    let list = [];
+    let ul = document.getElementById('list')
+    // Khởi tạo Firebase App
+    var app = firebase.initializeApp(firebaseConfig);
+
+    function uploadImages() {
+      const ref = firebase.storage().ref();
+      const files = document.querySelector('#photo').files;
+
+      if (files.length === 0) {
+        console.log("Vui lòng chọn ít nhất một tệp hình ảnh.");
+        return;
+      }
+
+      const uploadPromises = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const metadata = {
+          contentType: file.type,
+        };
+        const name = file.name;
+        const uploadIMG = ref.child(name).put(file, metadata);
+
+        const promise = uploadIMG
+          .then((snapshot) => snapshot.ref.getDownloadURL())
+          .then((url) => {
+            console.log("Đường dẫn URL của hình ảnh đã tải lên: " + url);
+            // Ở đây, bạn có thể thực hiện các hoạt động khác với URL hình ảnh, ví dụ: lưu vào cơ sở dữ liệu Firestore
+            return url;
+          });
+
+        uploadPromises.push(promise);
+      }
+
+      Promise.all(uploadPromises)
+        .then((downloadURLs) => {
+          list = downloadURLs;
+          ul.innerHTML = ''; // Xóa nội dung cũ của ul
+
+          for (let i = 0; i < list.length; i++) {
+            const li = document.createElement('li');
+            li.textContent = list[i];
+            ul.appendChild(li); // Thêm li vào ul
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi khi tải lên hình ảnh: " + error);
+        });
+    }
+
+
+  </script>
+</body>
+
+</html>

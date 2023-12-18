@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en" > 
 
 <head>
   <meta charset="utf-8" />
@@ -23,7 +23,7 @@
   <link rel="icon" type="image/png"
     href="https://firebasestorage.googleapis.com/v0/b/travel-bee-e0b59.appspot.com/o/logo.png?alt=media&token=9b7bf685-a7ff-49d9-9413-abdeee4cb722">
   <title>
-    Travel Bee
+    Travel Bee3
   </title>
   <!-- Sau đó thêm Bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -38,7 +38,7 @@
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
-
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"
     integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -81,6 +81,13 @@
 				measurementId: "G-DE29CFQQMY"
 			};
 			var config = firebase.initializeApp(firebaseConfig);
+      
+      $rootScope.url = "http://localhost:8080";
+      $http.get($rootScope.url + "/api/products")
+        .then(function (response) {
+          console.log(response.status); // 200 là thành công
+          console.log(response.data);
+        })
 
     })
 
